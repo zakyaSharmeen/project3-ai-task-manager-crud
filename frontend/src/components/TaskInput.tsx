@@ -19,9 +19,11 @@ export default function TaskInput() {
         className="border p-2 w-full"
         placeholder="Add a task"
         value={text}
-        onChange={(e) => setText(e.target.value)} // ✅ TS auto-detects type
+        onChange={(e) => setText(e.target.value)}
       />
-      <button onClick={addTask} className="bg-blue-500 text-white px-4">
+      <button
+        onClick={addTask}
+        className="bg-black text-white px-8 rounded-full">
         Add
       </button>
     </div>

@@ -46,7 +46,9 @@ export default function TaskList() {
   return (
     <div>
       {tasks.map((t) => (
-        <div key={t.id} className="border p-2 mb-2 flex gap-2">
+        <div
+          key={t.id}
+          className="border p-2 mb-2 flex gap-2 align-bottom justify-center">
           {editId === t.id ? (
             <>
               <input
@@ -56,7 +58,7 @@ export default function TaskList() {
               />
               <button
                 onClick={updateTask}
-                className="bg-green-500 text-white px-2">
+                className="bg-green-500 text-white px-8 py-2 rounded-full">
                 Save
               </button>
             </>
@@ -66,13 +68,13 @@ export default function TaskList() {
 
               <button
                 onClick={() => startEdit(t)}
-                className="bg-yellow-500 text-white px-2">
+                className="bg-yellow-500 text-white px-8 py-2 rounded-full">
                 Edit
               </button>
 
               <button
                 onClick={() => deleteTask(t.id)}
-                className="bg-red-500 text-white px-2">
+                className="bg-red-500 text-white px-8 py-2 rounded-full">
                 Delete
               </button>
             </>

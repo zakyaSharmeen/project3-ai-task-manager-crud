@@ -13,7 +13,7 @@ import AgentBox from "./components/AgentBox.tsx";
 import "./App.css";
 function App() {
   return (
-    <div className="w-1/2 mx-auto mt-10 p-6 border-amber-600 border-2 rounded-lg shadow">
+    <div className="w-1/2 mx-auto mt-10 p-6 border-black border-2 rounded-lg shadow">
       <TaskInput />
       <TaskList />
       <AgentBox />

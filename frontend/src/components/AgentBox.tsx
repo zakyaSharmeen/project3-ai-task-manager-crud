@@ -100,7 +100,7 @@ export default function AgentBox() {
           />
           <button
             onClick={runAgent}
-            className="bg-green-500 text-white px-3 py-1">
+            className="bg-black text-white px-4 py-2 rounded-full cursor-pointer">
             Run
           </button>
 
