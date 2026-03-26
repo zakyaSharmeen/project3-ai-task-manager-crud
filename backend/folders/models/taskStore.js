@@ -10,6 +10,7 @@ export const addTask = (text) => {
 };
 
 export const updateTask = (id, text) => {
+  // id = Number(id);
   const task = tasks.find((t) => t.id === id);
   if (task) task.text = text;
   return task;

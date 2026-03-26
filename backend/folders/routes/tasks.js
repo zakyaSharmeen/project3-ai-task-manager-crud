@@ -38,7 +38,7 @@ router.post("/agent", async (req, res) => {
   const parts = prompt.split(" ");
   const command = parts[0];
 
-  // ✅ ADD
+  // ADD
   if (command === "add") {
     const text = parts.slice(1).join(" ");
     const newTask = addTask(text);
@@ -51,24 +51,7 @@ router.post("/agent", async (req, res) => {
     });
   }
 
-  // ✅ DELETE
-  // if (command === "delete") {
-  //   const id = Number(parts[1]);
-
-  //   console.log("DELETE ID:", id);
-
-  //   if (!id) {
-  //     return res.json({ result: "Invalid delete command" });
-  //   }
-
-  //   deleteTask(id);
-
-  //   console.log("DELETE WORKED");
-
-  //   return res.json({
-  //     result: `Task deleted with id ${id}`,
-  //   });
-  // }
+  //DELETE
 
   if (command === "delete") {
     const value = parts.slice(1).join(" ");
@@ -87,6 +70,7 @@ router.post("/agent", async (req, res) => {
     }
 
     deleteTask(id);
+    console.log("DELETE WORKED");
 
     return res.json({
       result: `Task deleted`,
@@ -94,32 +78,67 @@ router.post("/agent", async (req, res) => {
   }
 
   // ✅ UPDATE
+
   // if (command === "update") {
-  //   const id = Number(parts[1]);
-  //   const text = parts.slice(2).join(" ");
+  //   const value = parts.slice(1).join(" ");
 
-  //   console.log("UPDATE ID:", id, "TEXT:", text);
+  //   let id = Number(parts[1]);
+  //   let text = parts.slice(2).join(" ");
 
-  //   if (!id || !text) {
-  //     return res.json({ result: "Invalid update command" });
+  //   // if user didn’t give id → find by text
+  //   if (isNaN(id)) {
+  //     const oldText = parts[1];
+
+  //     const task = getTasks().find((t) =>
+  //       t.text.toLowerCase().includes(oldText),
+  //     );
+
+  //     if (!task) {
+  //       return res.json({ result: "Task not found" });
+  //     }
+
+  //     id = task.id;
+  //     text = parts.slice(2).join(" ");
   //   }
 
   //   const updated = updateTask(id, text);
 
-  //   console.log("UPDATE RESULT:", updated);
+  //   console.log("UPDATE WORKED");
 
   //   return res.json({
-  //     result: updated ? `Task ${id} updated` : `Task not found`,
+  //     result: updated ? "Task updated" : "Task not found",
+  //   });
+  // }
+  // if (command === "update") {
+  //   const id = Number(parts[1]);
+  //   const text = parts.slice(2).join(" ").trim();
+
+  //   console.log("UPDATE ID:", id);
+  //   console.log("UPDATE TEXT:", text);
+
+  //   // ❌ validation
+  //   if (!id || !text) {
+  //     return res.json({
+  //       result: "Invalid format → use: update <id> <new text>",
+  //     });
+  //   }
+
+  //   const updated = updateTask(id, text);
+
+  //   console.log("UPDATED TASK:", updated);
+
+  //   return res.json({
+  //     result: updated ? `Task ${id} updated` : "Task not found",
   //   });
   // }
 
+  // ❌ ONLY IF NOTHING MATCHES
+
   if (command === "update") {
-    const value = parts.slice(1).join(" ");
-
     let id = Number(parts[1]);
-    let text = parts.slice(2).join(" ");
+    let text = parts.slice(2).join(" ").trim();
 
-    // if user didn’t give id → find by text
+    // ✅ If NOT ID → treat as text search
     if (isNaN(id)) {
       const oldText = parts[1];
 
@@ -132,7 +151,18 @@ router.post("/agent", async (req, res) => {
       }
 
       id = task.id;
-      text = parts.slice(2).join(" ");
+
+      // new text comes after old text
+      text = parts.slice(2).join(" ").trim();
+    }
+
+    console.log("UPDATE ID:", id);
+    console.log("NEW TEXT:", text);
+
+    if (!text) {
+      return res.json({
+        result: "Invalid format → update <id/text> <new text>",
+      });
     }
 
     const updated = updateTask(id, text);
@@ -142,7 +172,6 @@ router.post("/agent", async (req, res) => {
     });
   }
 
-  // ❌ ONLY IF NOTHING MATCHES
   console.log("FALLBACK AI");
 
   const result = await runAgent(prompt);
