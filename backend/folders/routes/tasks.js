@@ -79,61 +79,6 @@ router.post("/agent", async (req, res) => {
 
   // ✅ UPDATE
 
-  // if (command === "update") {
-  //   const value = parts.slice(1).join(" ");
-
-  //   let id = Number(parts[1]);
-  //   let text = parts.slice(2).join(" ");
-
-  //   // if user didn’t give id → find by text
-  //   if (isNaN(id)) {
-  //     const oldText = parts[1];
-
-  //     const task = getTasks().find((t) =>
-  //       t.text.toLowerCase().includes(oldText),
-  //     );
-
-  //     if (!task) {
-  //       return res.json({ result: "Task not found" });
-  //     }
-
-  //     id = task.id;
-  //     text = parts.slice(2).join(" ");
-  //   }
-
-  //   const updated = updateTask(id, text);
-
-  //   console.log("UPDATE WORKED");
-
-  //   return res.json({
-  //     result: updated ? "Task updated" : "Task not found",
-  //   });
-  // }
-  // if (command === "update") {
-  //   const id = Number(parts[1]);
-  //   const text = parts.slice(2).join(" ").trim();
-
-  //   console.log("UPDATE ID:", id);
-  //   console.log("UPDATE TEXT:", text);
-
-  //   // ❌ validation
-  //   if (!id || !text) {
-  //     return res.json({
-  //       result: "Invalid format → use: update <id> <new text>",
-  //     });
-  //   }
-
-  //   const updated = updateTask(id, text);
-
-  //   console.log("UPDATED TASK:", updated);
-
-  //   return res.json({
-  //     result: updated ? `Task ${id} updated` : "Task not found",
-  //   });
-  // }
-
-  // ❌ ONLY IF NOTHING MATCHES
-
   if (command === "update") {
     let id = Number(parts[1]);
     let text = parts.slice(2).join(" ").trim();
