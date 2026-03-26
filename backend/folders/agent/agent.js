@@ -30,22 +30,3 @@ Do not give long explanations.
 
   return result;
 };
-
-// import OpenAI from "openai";
-// import dotenv from "dotenv";
-
-// dotenv.config({ path: "../.env", quiet: true });
-
-// const client = new OpenAI({
-//   apiKey: process.env.OPENAI_API_KEY,
-//   baseURL: "https://openrouter.ai/api/v1",
-// });
-
-// export async function runAgent() {
-//   const response = await client.chat.completions.create({
-//     model: "openai/gpt-3.5-turbo",
-//     messages: [{ role: "user", content: "Hello" }],
-//   });
-
-//   console.log(response.choices[0].message);
-// }

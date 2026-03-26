@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import taskRoutes from "../folders/routes/tasks.js";
-import { runAgent } from "./agent/agent.js";
+// import { runAgent } from "./agent/agent.js";
 
 // dotenv.config();
 dotenv.config({ quiet: true });
@@ -15,7 +15,7 @@ app.use("/tasks", taskRoutes);
 
 app.listen(5000, () => console.log("Server running on port 5000"));
 
-runAgent("Add task to delete scrolling");
+// runAgent("Add task to delete scrolling");
 // flow------------backend
 // Request → Route → Agent/Model → Response
 
