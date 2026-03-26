@@ -1,7 +1,26 @@
-export default function App() {
+// export default function App() {
+//   return (
+//     <div>
+//       <h1 className="text-4xl font-bold  bg-green-500">Hello world!</h1>
+//     </div>
+//   );
+// }
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import TaskInput from "./components/TaskInput.tsx";
+import TaskList from "./components/TaskList.tsx";
+import AgentBox from "./components/AgentBox.tsx";
+import "./App.css";
+function App() {
   return (
-    <div>
-      <h1 className="text-4xl font-bold  bg-green-500">Hello world!</h1>
+    <div className="w-1/2 mx-auto mt-10 p-6 border-amber-600 border-2 rounded-lg shadow">
+      <TaskInput />
+      <TaskList />
+      <AgentBox />
     </div>
   );
 }
+
+export default App;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
