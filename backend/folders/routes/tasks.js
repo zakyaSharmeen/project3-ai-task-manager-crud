@@ -1,3 +1,16 @@
+// You did 7 main things in this file
+
+// Imported modules (Express, task functions, agent)
+// Created router using express.Router()
+// Handled GET request → fetch all tasks
+// Handled POST request → add a new task
+// Handled PUT request → update a task
+// Handled DELETE request → remove a task
+// Built an AI command route (/agent)
+// Parses user input
+// Supports add / delete / update commands
+// Falls back to runAgent() if command not matched
+
 import express from "express";
 import {
   getTasks,
@@ -30,97 +43,106 @@ router.delete("/:id", (req, res) => {
   console.log("coming from delete request from tasks.js");
 });
 
+// router.post("/agent", async (req, res) => {
+//   const prompt = req.body.prompt.trim().toLowerCase();
+
+//   console.log("Agent received:", prompt);
+
+//   const parts = prompt.split(" ");
+//   const command = parts[0];
+
+//   // ADD
+//   if (command === "add") {
+//     const text = parts.slice(1).join(" ");
+//     const newTask = addTask(text);
+
+//     console.log("ADD WORKED");
+
+//     return res.json({
+//       result: `Task added: ${text}`,
+//       task: newTask,
+//     });
+//   }
+
+//   //DELETE
+
+//   if (command === "delete") {
+//     const value = parts.slice(1).join(" ");
+
+//     let id = Number(value);
+
+//     // if not number → find by text
+//     if (isNaN(id)) {
+//       const task = getTasks().find((t) => t.text.toLowerCase().includes(value));
+
+//       if (!task) {
+//         return res.json({ result: "Task not found" });
+//       }
+
+//       id = task.id;
+//     }
+
+//     deleteTask(id);
+//     console.log("DELETE WORKED");
+
+//     return res.json({
+//       result: `Task deleted`,
+//     });
+//   }
+
+//   // ✅ UPDATE
+
+//   if (command === "update") {
+//     let id = Number(parts[1]);
+//     let text = parts.slice(2).join(" ").trim();
+
+//     // ✅ If NOT ID → treat as text search
+//     if (isNaN(id)) {
+//       const oldText = parts[1];
+
+//       const task = getTasks().find((t) =>
+//         t.text.toLowerCase().includes(oldText),
+//       );
+
+//       if (!task) {
+//         return res.json({ result: "Task not found" });
+//       }
+
+//       id = task.id;
+
+//       // new text comes after old text
+//       text = parts.slice(2).join(" ").trim();
+//     }
+
+//     console.log("UPDATE ID:", id);
+//     console.log("NEW TEXT:", text);
+
+//     if (!text) {
+//       return res.json({
+//         result: "Invalid format → update <id/text> <new text>",
+//       });
+//     }
+
+//     const updated = updateTask(id, text);
+
+//     return res.json({
+//       result: updated ? "Task updated" : "Task not found",
+//     });
+//   }
+
+//   console.log("FALLBACK AI");
+
+//   const result = await runAgent(prompt);
+
+//   res.json({ result });
+// });
+
 router.post("/agent", async (req, res) => {
-  const prompt = req.body.prompt.trim().toLowerCase();
-
-  console.log("Agent received:", prompt);
-
-  const parts = prompt.split(" ");
-  const command = parts[0];
-
-  // ADD
-  if (command === "add") {
-    const text = parts.slice(1).join(" ");
-    const newTask = addTask(text);
-
-    console.log("ADD WORKED");
-
-    return res.json({
-      result: `Task added: ${text}`,
-      task: newTask,
-    });
-  }
-
-  //DELETE
-
-  if (command === "delete") {
-    const value = parts.slice(1).join(" ");
-
-    let id = Number(value);
-
-    // if not number → find by text
-    if (isNaN(id)) {
-      const task = getTasks().find((t) => t.text.toLowerCase().includes(value));
-
-      if (!task) {
-        return res.json({ result: "Task not found" });
-      }
-
-      id = task.id;
-    }
-
-    deleteTask(id);
-    console.log("DELETE WORKED");
-
-    return res.json({
-      result: `Task deleted`,
-    });
-  }
-
-  // ✅ UPDATE
-
-  if (command === "update") {
-    let id = Number(parts[1]);
-    let text = parts.slice(2).join(" ").trim();
-
-    // ✅ If NOT ID → treat as text search
-    if (isNaN(id)) {
-      const oldText = parts[1];
-
-      const task = getTasks().find((t) =>
-        t.text.toLowerCase().includes(oldText),
-      );
-
-      if (!task) {
-        return res.json({ result: "Task not found" });
-      }
-
-      id = task.id;
-
-      // new text comes after old text
-      text = parts.slice(2).join(" ").trim();
-    }
-
-    console.log("UPDATE ID:", id);
-    console.log("NEW TEXT:", text);
-
-    if (!text) {
-      return res.json({
-        result: "Invalid format → update <id/text> <new text>",
-      });
-    }
-
-    const updated = updateTask(id, text);
-
-    return res.json({
-      result: updated ? "Task updated" : "Task not found",
-    });
-  }
-
-  console.log("FALLBACK AI");
+  const prompt = req.body.prompt;
 
   const result = await runAgent(prompt);
 
   res.json({ result });
+  console.log(result);
 });
 export default router;
