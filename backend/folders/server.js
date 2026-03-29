@@ -1,3 +1,16 @@
+// this folder -
+//express route start
+//route connect
+
+/////////////////////////////////////
+// You did 5 main things here:
+
+// Imported required packages (Express, CORS, dotenv, routes)
+// Configured environment variables
+// Created the Express app
+// Added middleware (CORS + JSON parsing)
+// Set up routes and started the server
+
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
