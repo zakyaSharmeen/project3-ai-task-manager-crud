@@ -13,6 +13,7 @@ import {
   deleteTask,
 } from "../models/taskStore.js";
 import { Task } from "../models/taskStore.js";
+import mongoose from "mongoose";
 
 // Tool: Add Task
 const addTaskTool = tool({
@@ -32,23 +33,6 @@ const addTaskTool = tool({
   },
 });
 //delete all the tasks at ones
-
-// const deleteAllTasksTool = tool({
-//   name: "deleteAllTasks",
-//   description: "Delete all tasks",
-//   parameters: {
-//     type: "object",
-//     properties: {},
-//   },
-//   execute: async () => {
-//     console.log("TOOL: deleteAllTasks");
-
-//     const tasks = getTasks();
-//     tasks.forEach((t) => deleteTask(t.id));
-
-//     return { success: true };
-//   },
-// });
 
 const deleteAllTasksTool = tool({
   name: "deleteAllTasks",
@@ -101,8 +85,6 @@ const deleteTaskTool = tool({
     return { success: true };
   },
 });
-
-import mongoose from "mongoose";
 
 const updateTaskTool = tool({
   name: "updateTask",
