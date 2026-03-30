@@ -2,19 +2,23 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 type Task = {
-  id: number;
+  _id: string;
   text: string;
 };
 
 export default function TaskList() {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [editId, setEditId] = useState<number | null>(null);
+  const [editId, setEditId] = useState<string | null>(null);
   const [editText, setEditText] = useState<string>("");
 
-  const fetchTasks = () => {
-    axios
-      .get<Task[]>("http://localhost:5000/tasks")
-      .then((res) => setTasks(res.data));
+  // ✅ FETCH
+  const fetchTasks = async () => {
+    try {
+      const res = await axios.get<Task[]>("http://localhost:5000/tasks");
+      setTasks(res.data);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {
@@ -22,34 +26,40 @@ export default function TaskList() {
   }, []);
 
   // ✅ DELETE
-  const deleteTask = async (id: number) => {
-    await axios.delete(`http://localhost:5000/tasks/${id}`);
-    fetchTasks();
+  const deleteTask = async (_id: string) => {
+    try {
+      await axios.delete(`http://localhost:5000/tasks/${_id}`);
+      fetchTasks();
+    } catch (err) {
+      console.error("Delete failed", err);
+    }
   };
 
   // ✅ START EDIT
   const startEdit = (task: Task) => {
-    setEditId(task.id);
+    setEditId(task._id);
     setEditText(task.text);
   };
 
   // ✅ UPDATE
   const updateTask = async () => {
-    await axios.put(`http://localhost:5000/tasks/${editId}`, {
-      text: editText,
-    });
-    setEditId(null);
-    setEditText("");
-    fetchTasks();
+    try {
+      await axios.put(`http://localhost:5000/tasks/${editId}`, {
+        text: editText,
+      });
+      setEditId(null);
+      setEditText("");
+      fetchTasks();
+    } catch (err) {
+      console.error("update failed", err);
+    }
   };
 
   return (
     <div>
       {tasks.map((t) => (
-        <div
-          key={t.id}
-          className="border p-2 mb-2 flex gap-2 align-bottom justify-center">
-          {editId === t.id ? (
+        <div key={t._id} className="border p-2 mb-2 flex gap-2 justify-center">
+          {editId === t._id ? (
             <>
               <input
                 className="border p-1"
@@ -73,7 +83,7 @@ export default function TaskList() {
               </button>
 
               <button
-                onClick={() => deleteTask(t.id)}
+                onClick={() => deleteTask(t._id)}
                 className="bg-red-500 text-white px-8 py-2 rounded-full">
                 Delete
               </button>
