@@ -1,15 +1,12 @@
 // You did 7 main things in this file
 
-// Imported modules (Express, task functions, agent)
-// Created router using express.Router()
-// Handled GET request → fetch all tasks
-// Handled POST request → add a new task
-// Handled PUT request → update a task
-// Handled DELETE request → remove a task
-// Built an AI command route (/agent)
-// Parses user input
-// Supports add / delete / update commands
-// Falls back to runAgent() if command not matched
+// Imported modules → express, task functions, AI agent
+// Created router → express.Router()
+// GET / → fetch all tasks
+// POST / → add new task
+// PUT /:id → update task
+// DELETE /:id → delete task
+// POST /agent → send prompt to AI (runAgent) and return result
 
 import express from "express";
 import {
