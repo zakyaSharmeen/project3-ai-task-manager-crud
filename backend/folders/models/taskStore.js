@@ -1,3 +1,10 @@
+// Created storage → tasks = [] (array to store tasks)
+// Created ID counter → id = 1 (auto-increment)
+// getTasks() → returns all tasks
+// addTask(text) → creates new task + adds to array
+// updateTask(id, text) → finds task & updates text
+// deleteTask(id) → removes task from array
+
 let tasks = [];
 let id = 1;
 
