@@ -61,31 +61,11 @@ const deleteAllTasksTool = tool({
   execute: async () => {
     console.log("TOOL: deleteAllTasks");
 
-    await Task.deleteMany({}); // ✅ fastest & correct
+    await Task.deleteMany({});
 
     return { success: true };
   },
 });
-
-// Tool: Delete Task
-// const deleteTaskTool = tool({
-//   name: "deleteTask",
-//   description: "Delete a task by id",
-//   parameters: {
-//     type: "object",
-//     properties: {
-//       id: { type: "number" },
-//     },
-//     required: ["id"],
-//   },
-//   execute: async ({ id }) => {
-//     console.log("TOOL: deleteTask", id);
-
-//     deleteTask(id);
-//     return { success: true };
-//   },
-
-// });
 
 const deleteTaskTool = tool({
   name: "deleteTask",
@@ -121,25 +101,6 @@ const deleteTaskTool = tool({
     return { success: true };
   },
 });
-
-// Tool: Update Task
-// const updateTaskTool = tool({
-//   name: "updateTask",
-//   description: "Update a task",
-//   parameters: {
-//     type: "object",
-//     properties: {
-//       id: { type: "number" },
-//       text: { type: "string" },
-//     },
-//     required: ["id", "text"],
-//   },
-//   execute: async ({ id, text }) => {
-//     console.log("TOOL: updateTask", id, text);
-
-//     return updateTask(id, text);
-//   },
-// });
 
 import mongoose from "mongoose";
 
@@ -206,23 +167,8 @@ Only respond after using tools.
   tools: [addTaskTool, deleteTaskTool, updateTaskTool, deleteAllTasksTool],
 });
 
-// export const runAgent = async (input) => {
-//   const response = await run(agent, input);
-
-//   return response.finalOutput;
-// };
 export const runAgent = async (input) => {
-  try {
-    const response = await run(agent, input);
-    console.log(response.finalOutput);
-    return response.finalOutput;
-  } catch (err) {
-    // ✅ suppress 401 error
-    if (err.status === 401) {
-      return "IGNORE::::::::::::::AI not configured";
-    }
+  const response = await run(agent, input);
 
-    console.error(err); // log other errors only
-    return "Something went wrong";
-  }
+  return response.finalOutput;
 };

@@ -36,20 +36,3 @@ mongoose
 app.use("/tasks", taskRoutes);
 
 app.listen(5000, () => console.log("Server running on port 5000"));
-
-// runAgent("Add task to delete scrolling");
-// flow------------backend
-// Request → Route → Agent/Model → Response
-
-///flow -frontend
-// Frontend / server call
-//         ↓
-// routes/tasks.js
-//         ↓
-// runAgent() (agent.js)
-//         ↓
-// OpenAI / OpenRouter API
-//         ↓
-// Response comes back
-//         ↓
-// Sent to frontend / console
