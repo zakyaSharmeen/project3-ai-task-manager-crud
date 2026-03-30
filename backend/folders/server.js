@@ -17,9 +17,9 @@ import dotenv from "dotenv";
 import taskRoutes from "../folders/routes/tasks.js";
 // import { runAgent } from "./agent/agent.js";
 
-dotenv.config({ path: "../.env", quiet: true }); // explicitly load from backend/.env
+dotenv.config({ path: "../.env", quiet: true });
 
-console.log("SERVER KEY::::::::::::::", process.env.OPENAI_API_KEY);
+// console.log("SERVER KEY::::::::::::::", process.env.OPENAI_API_KEY);
 
 const app = express();
 app.use(cors());

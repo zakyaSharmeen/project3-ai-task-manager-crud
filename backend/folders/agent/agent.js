@@ -1,10 +1,9 @@
 process.env.OPENAI_AGENTS_DISABLE_TRACING = "true";
-
 import dotenv from "dotenv";
 
 dotenv.config({ path: "../.env", quiet: true }); // explicitly load from backend/.env
 
-console.log("SERVER KEY::::::::::::::2", process.env.OPENAI_API_KEY);
+// console.log("SERVER KEY::::::::::::::2", process.env.OPENAI_API_KEY);
 ////////////////////////
 //MADE WITH LLM- GPT
 
@@ -108,6 +107,24 @@ const addTaskTool = tool({
     return addTask(text);
   },
 });
+//delete all the tasks at ones
+
+const deleteAllTasksTool = tool({
+  name: "deleteAllTasks",
+  description: "Delete all tasks",
+  parameters: {
+    type: "object",
+    properties: {},
+  },
+  execute: async () => {
+    console.log("TOOL: deleteAllTasks");
+
+    const tasks = getTasks();
+    tasks.forEach((t) => deleteTask(t.id));
+
+    return { success: true };
+  },
+});
 
 // Tool: Delete Task
 const deleteTaskTool = tool({
@@ -150,20 +167,22 @@ const updateTaskTool = tool({
 const agent = new Agent({
   name: "TaskManager",
   model: "gpt-4.1-mini",
+  //
   instructions: `
 You are a task manager AI.
 
-- Perform actions using tools
-- After using a tool, respond with a short message
-Examples:
-- "Task added successfully"
-- "Task deleted"
-- "Task updated"
+RULES:
+- ALWAYS use tools to perform actions
+- NEVER just reply without calling a tool
+- If user says "delete all" or "clear all tasks", you MUST call deleteAllTasks
+- If user says "add", call addTask
+- If user says "update", call updateTask
+- If user says "delete", call deleteTask
 
-Do not return JSON.
-Keep it short.
+Do not fake responses.
+Only respond after using tools.
 `,
-  tools: [addTaskTool, deleteTaskTool, updateTaskTool],
+  tools: [addTaskTool, deleteTaskTool, updateTaskTool, deleteAllTasksTool],
 });
 
 export const runAgent = async (input) => {
