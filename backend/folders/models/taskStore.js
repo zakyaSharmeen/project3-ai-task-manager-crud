@@ -1,9 +1,13 @@
-// // Created storage → tasks = [] (array to store tasks)
-// // Created ID counter → id = 1 (auto-increment)
-// // getTasks() → returns all tasks
-// // addTask(text) → creates new task + adds to array
-// // updateTask(id, text) → finds task & updates text
-// // deleteTask(id) → removes task from array
+//9thins
+// Disables OpenAI agent tracing logs
+// Imports required modules (dotenv, mongoose)
+// Defines task schema (text field)
+// Creates Task model
+// Gets all tasks from database
+// Adds new task to database
+// Updates task using _id
+// Validates ID before delete
+// Deletes task from database
 
 process.env.OPENAI_AGENTS_DISABLE_TRACING = "true";
 import dotenv from "dotenv";
@@ -13,19 +17,19 @@ const taskSchema = new mongoose.Schema({
   text: String,
 });
 
-export const Task = mongoose.model("Task", taskSchema);
+export const TaskModel = mongoose.model("Task", taskSchema);
 
 export const getTasks = async () => {
-  return await Task.find();
+  return await TaskModel.find(); //
 };
 
 export const addTask = async (text) => {
-  const newTask = new Task({ text });
+  const newTask = new TaskModel({ text }); //
   return await newTask.save();
 };
 
 export const updateTask = async (id, text) => {
-  return await Task.findByIdAndUpdate(id, { text }, { new: true });
+  return await TaskModel.findByIdAndUpdate(id, { text }, { new: true }); //
 };
 
 export const deleteTask = async (id) => {
@@ -33,5 +37,5 @@ export const deleteTask = async (id) => {
     throw new Error("Invalid ID");
   }
 
-  return await Task.findByIdAndDelete(id);
+  return await TaskModel.findByIdAndDelete(id); //
 };

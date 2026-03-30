@@ -1,3 +1,11 @@
+// //6 things
+// Disables agent tracing
+// Loads .env
+// Imports agent + task functions
+// Creates add task, delete, delete all, update tool
+// Creates AI agent (instructions, tool)
+// Runs agent and returns output
+
 process.env.OPENAI_AGENTS_DISABLE_TRACING = "true";
 import dotenv from "dotenv";
 
@@ -12,7 +20,7 @@ import {
   updateTask,
   deleteTask,
 } from "../models/taskStore.js";
-import { Task } from "../models/taskStore.js";
+import { TaskModel } from "../models/taskStore.js";
 import mongoose from "mongoose";
 
 // Tool: Add Task
@@ -45,7 +53,7 @@ const deleteAllTasksTool = tool({
   execute: async () => {
     console.log("TOOL: deleteAllTasks");
 
-    await Task.deleteMany({});
+    await TaskModel.deleteMany({});
 
     return { success: true };
   },
