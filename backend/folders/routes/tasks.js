@@ -7,6 +7,8 @@
 // PUT /:id → update task
 // DELETE /:id → delete task
 // POST /agent → send prompt to AI (runAgent) and return result
+process.env.OPENAI_AGENTS_DISABLE_TRACING = "true";
+import dotenv from "dotenv";
 
 import express from "express";
 import {
@@ -19,26 +21,26 @@ import { runAgent } from "../agent/agent.js";
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.json(getTasks());
-  console.log("coming from get request from tasks.js");
-});
+// router.get("/", (req, res) => {
+//   res.json(getTasks());
+//   console.log("coming from get request from tasks.js");
+// });
 
-router.post("/", (req, res) => {
-  res.json(addTask(req.body.text));
-  console.log("coming from post request from tasks.js");
-});
+// router.post("/", (req, res) => {
+//   res.json(addTask(req.body.text));
+//   console.log("coming from post request from tasks.js");
+// });
 
-router.put("/:id", (req, res) => {
-  res.json(updateTask(parseInt(req.params.id), req.body.text));
-  console.log("coming from put request from tasks.js");
-});
+// router.put("/:id", (req, res) => {
+//   res.json(updateTask(parseInt(req.params.id), req.body.text));
+//   console.log("coming from put request from tasks.js");
+// });
 
-router.delete("/:id", (req, res) => {
-  deleteTask(parseInt(req.params.id));
-  res.sendStatus(204);
-  console.log("coming from delete request from tasks.js");
-});
+// router.delete("/:id", (req, res) => {
+//   deleteTask(parseInt(req.params.id));
+//   res.sendStatus(204);
+//   console.log("coming from delete request from tasks.js");
+// });
 
 // router.post("/agent", async (req, res) => {
 //   const prompt = req.body.prompt.trim().toLowerCase();
@@ -133,6 +135,37 @@ router.delete("/:id", (req, res) => {
 
 //   res.json({ result });
 // });
+
+router.get("/", async (req, res) => {
+  res.json(await getTasks());
+});
+
+router.post("/", async (req, res) => {
+  res.json(await addTask(req.body.text));
+});
+
+router.put("/:id", async (req, res) => {
+  res.json(await updateTask(req.params.id, req.body.text));
+});
+
+// router.delete("/:id", async (req, res) => {
+//   await deleteTask(req.params.id);
+//   res.sendStatus(204);
+// });
+// router.delete("/:id", async (req, res) => {
+//   console.log("REQ ID:", req.params.id);
+
+//   await deleteTask(req.params.id); //
+//   res.sendStatus(204);
+// });
+
+router.delete("/:id", async (req, res) => {
+  console.log("FULL URL:", req.originalUrl);
+  console.log("REQ PARAMS:", req.params);
+
+  await deleteTask(req.params.id);
+  res.sendStatus(204);
+});
 
 router.post("/agent", async (req, res) => {
   const prompt = req.body.prompt;

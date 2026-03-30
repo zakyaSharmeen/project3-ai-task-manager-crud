@@ -3,83 +3,6 @@ import dotenv from "dotenv";
 
 dotenv.config({ path: "../.env", quiet: true }); // explicitly load from backend/.env
 
-// console.log("SERVER KEY::::::::::::::2", process.env.OPENAI_API_KEY);
-////////////////////////
-//MADE WITH LLM- GPT
-
-// import { client } from "../openai.js";
-
-// export const runAgent = async (input) => {
-//   const response = await client.chat.completions.create({
-//     model: "gpt-4.1-mini",
-//     // model: "openai/gpt-3.5-turbo",
-//     messages: [
-//       {
-//         role: "system",
-//         content: `
-// You are an AI task manager agent.
-
-// Your job:
-// - Understand user requests
-// - Help with tasks (add, update, delete, suggest)
-// - Respond clearly and shortly
-// - If user gives a task, rephrase it cleanly
-
-// Do not give long explanations.
-// `,
-//       },
-//       { role: "user", content: input },
-//     ],
-//   });
-
-//   //   return response.choices[0].message.content;
-//   const result = response.choices[0].message.content;
-
-//   console.log("🤖 Agent Response:", result); // 👈 THIS LINE
-
-//   return result;
-// };
-
-///////////////////////////////////////////////////////////////////////////////////
-
-//MADE WITH LLM+SDK
-
-// process.env.OPENAI_AGENTS_DISABLE_TRACING = "true";
-// import "dotenv/config";
-
-// import { Agent, run } from "@openai/agents";
-
-// const agent = new Agent({
-//   name: "TaskManager",
-//   model: "gpt-4.1-mini",
-//   instructions: `
-// You are an AI task manager agent.
-
-// Your job:
-// - Understand user requests
-// - Help with tasks (add, update, delete, suggest)
-// -if the command comes update to the user given so only add the user given task
-// - Respond clearly and shortly
-// - If user gives a task, rephrase it cleanly
-
-// Do not give long explanations.
-// `,
-// });
-
-// export const runAgent = async (input) => {
-//   const response = await run(agent, input);
-
-//   const result = response.finalOutput;
-
-//   console.log(
-//     "🤖 Agent Response::::::::::::::::::::::::::::::::::::::::::::::::::::::::;;:",
-//     result,
-//   );
-//   console.log("KEY:", process.env.OPENAI_API_KEY);
-
-//   return result;
-// };
-
 ///////////////////////////////////testting
 
 import { Agent, run, tool } from "@openai/agents";
@@ -89,6 +12,7 @@ import {
   updateTask,
   deleteTask,
 } from "../models/taskStore.js";
+import { Task } from "../models/taskStore.js";
 
 // Tool: Add Task
 const addTaskTool = tool({
@@ -109,6 +33,23 @@ const addTaskTool = tool({
 });
 //delete all the tasks at ones
 
+// const deleteAllTasksTool = tool({
+//   name: "deleteAllTasks",
+//   description: "Delete all tasks",
+//   parameters: {
+//     type: "object",
+//     properties: {},
+//   },
+//   execute: async () => {
+//     console.log("TOOL: deleteAllTasks");
+
+//     const tasks = getTasks();
+//     tasks.forEach((t) => deleteTask(t.id));
+
+//     return { success: true };
+//   },
+// });
+
 const deleteAllTasksTool = tool({
   name: "deleteAllTasks",
   description: "Delete all tasks",
@@ -116,51 +57,131 @@ const deleteAllTasksTool = tool({
     type: "object",
     properties: {},
   },
+
   execute: async () => {
     console.log("TOOL: deleteAllTasks");
 
-    const tasks = getTasks();
-    tasks.forEach((t) => deleteTask(t.id));
+    await Task.deleteMany({}); // ✅ fastest & correct
 
     return { success: true };
   },
 });
 
 // Tool: Delete Task
+// const deleteTaskTool = tool({
+//   name: "deleteTask",
+//   description: "Delete a task by id",
+//   parameters: {
+//     type: "object",
+//     properties: {
+//       id: { type: "number" },
+//     },
+//     required: ["id"],
+//   },
+//   execute: async ({ id }) => {
+//     console.log("TOOL: deleteTask", id);
+
+//     deleteTask(id);
+//     return { success: true };
+//   },
+
+// });
+
 const deleteTaskTool = tool({
   name: "deleteTask",
-  description: "Delete a task by id",
+  description: "Delete a task by id or text",
   parameters: {
     type: "object",
     properties: {
-      id: { type: "number" },
+      id: { type: "string" }, // ✅ FIXED
     },
     required: ["id"],
   },
-  execute: async ({ id }) => {
-    console.log("TOOL: deleteTask", id);
 
-    deleteTask(id);
+  execute: async ({ id }) => {
+    let taskId = id;
+
+    // if not valid ObjectId → find by text
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      const tasks = await getTasks();
+
+      const found = tasks.find((t) =>
+        t.text.toLowerCase().includes(id.toLowerCase()),
+      );
+
+      if (!found) {
+        return { success: false, message: "Task not found" };
+      }
+
+      taskId = found._id;
+    }
+
+    await deleteTask(taskId);
+
     return { success: true };
   },
 });
 
 // Tool: Update Task
+// const updateTaskTool = tool({
+//   name: "updateTask",
+//   description: "Update a task",
+//   parameters: {
+//     type: "object",
+//     properties: {
+//       id: { type: "number" },
+//       text: { type: "string" },
+//     },
+//     required: ["id", "text"],
+//   },
+//   execute: async ({ id, text }) => {
+//     console.log("TOOL: updateTask", id, text);
+
+//     return updateTask(id, text);
+//   },
+// });
+
+import mongoose from "mongoose";
+
 const updateTaskTool = tool({
   name: "updateTask",
-  description: "Update a task",
+  description: "Update a task by id or text",
   parameters: {
     type: "object",
     properties: {
-      id: { type: "number" },
+      id: { type: "string" }, // ✅ FIXED
       text: { type: "string" },
     },
     required: ["id", "text"],
   },
+
   execute: async ({ id, text }) => {
     console.log("TOOL: updateTask", id, text);
 
-    return updateTask(id, text);
+    let taskId = id;
+
+    // if not valid ObjectId → find by text
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      const tasks = await getTasks();
+
+      const found = tasks.find((t) =>
+        t.text.toLowerCase().includes(id.toLowerCase()),
+      );
+
+      if (!found) {
+        return { success: false, message: "Task not found" };
+      }
+
+      taskId = found._id;
+    }
+
+    const updated = await updateTask(taskId, text);
+
+    if (!updated) {
+      return { success: false, message: "Task not found" };
+    }
+
+    return { success: true, task: updated }; // ✅ return result
   },
 });
 
@@ -185,8 +206,23 @@ Only respond after using tools.
   tools: [addTaskTool, deleteTaskTool, updateTaskTool, deleteAllTasksTool],
 });
 
-export const runAgent = async (input) => {
-  const response = await run(agent, input);
+// export const runAgent = async (input) => {
+//   const response = await run(agent, input);
 
-  return response.finalOutput;
+//   return response.finalOutput;
+// };
+export const runAgent = async (input) => {
+  try {
+    const response = await run(agent, input);
+    console.log(response.finalOutput);
+    return response.finalOutput;
+  } catch (err) {
+    // ✅ suppress 401 error
+    if (err.status === 401) {
+      return "IGNORE::::::::::::::AI not configured";
+    }
+
+    console.error(err); // log other errors only
+    return "Something went wrong";
+  }
 };
