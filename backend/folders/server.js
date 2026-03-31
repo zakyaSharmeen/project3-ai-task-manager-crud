@@ -3,7 +3,7 @@
 //route connect
 
 /////////////////////////////////////
-// You did 5 main things here:
+// You did 6 main things here:
 
 // Imported required packages (Express, CORS, dotenv, routes)
 // Configured environment variables
