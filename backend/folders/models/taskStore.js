@@ -1,5 +1,5 @@
 //5 thins
-// Imports required modules (dotenv, mongoose)
+// MONGO DB STORAGE SET UP
 // Defines task schema (text field)
 // Creates Task model
 // Gets all tasks, add, update, delete from database

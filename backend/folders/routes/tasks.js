@@ -1,12 +1,10 @@
-// You did 7 main things in this file
+// You did 4 main things in this file
 
 // Imported modules → express, task functions, AI agent
 // Created router → express.Router()
-// GET / → fetch all tasks
-// POST / → add new task
-// PUT /:id → update task
-// DELETE /:id → delete task
+//api request-// GET, POST, PUT, DELETE
 // POST /agent → send prompt to AI (runAgent) and return result
+
 process.env.OPENAI_AGENTS_DISABLE_TRACING = "true";
 import dotenv from "dotenv";
 
