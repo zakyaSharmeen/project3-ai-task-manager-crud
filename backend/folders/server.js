@@ -9,6 +9,7 @@
 // Configured environment variables
 // Created the Express app
 // Added middleware (CORS + JSON parsing)
+//mongo connect
 // Set up routes and started the server
 
 process.env.OPENAI_AGENTS_DISABLE_TRACING = "true";
