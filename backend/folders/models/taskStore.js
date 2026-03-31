@@ -1,9 +1,7 @@
-//5 thins
+//3 thins
 // MONGO DB STORAGE SET UP
-// Defines task schema (text field)
-// Creates Task model
+// Creates task schema and Task model
 // Gets all tasks, add, update, delete from database
-// Validates ID before delete
 
 process.env.OPENAI_AGENTS_DISABLE_TRACING = "true";
 import dotenv from "dotenv";

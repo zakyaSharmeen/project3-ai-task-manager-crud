@@ -1,7 +1,5 @@
-// //6 things
-// Disables agent tracing
-// Loads .env
-// Imports agent + task functions
+// //3 things
+
 // Creates add task, delete, delete all, update tool
 // Creates AI agent (instructions, tool)
 // Runs agent and returns output
