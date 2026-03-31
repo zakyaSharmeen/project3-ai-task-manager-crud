@@ -1,13 +1,9 @@
-//9thins
-// Disables OpenAI agent tracing logs
+//5 thins
 // Imports required modules (dotenv, mongoose)
 // Defines task schema (text field)
 // Creates Task model
-// Gets all tasks from database
-// Adds new task to database
-// Updates task using _id
+// Gets all tasks, add, update, delete from database
 // Validates ID before delete
-// Deletes task from database
 
 process.env.OPENAI_AGENTS_DISABLE_TRACING = "true";
 import dotenv from "dotenv";
