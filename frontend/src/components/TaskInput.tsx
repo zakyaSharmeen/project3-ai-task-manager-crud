@@ -1,9 +1,10 @@
+// Takes user input → validates it → sends it to backend → refreshes to show new task
+
 import { useState } from "react";
 import axios from "axios";
 
 export default function TaskInput() {
-  const [text, setText] = useState<string>(""); // ✅ type added
-
+  const [text, setText] = useState<string>("");
   const addTask = async () => {
     if (!text.trim()) {
       alert("PLEASE ENTER A TASK");

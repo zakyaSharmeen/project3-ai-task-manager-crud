@@ -1,3 +1,5 @@
+//  “Takes user input, sends it to an AI backend via Axios, displays the response, and reloads the app.”
+
 import { useState } from "react";
 import axios from "axios";
 
@@ -24,7 +26,7 @@ export default function AgentBox() {
 
     setResponse(res.data.result);
 
-    // // ✅ reload to show new task
+    // // reload to show new task
     window.location.reload();
   };
 
@@ -52,7 +54,7 @@ export default function AgentBox() {
             Run
           </button>
 
-          <p className="mt-2 text-sm">{response}</p>
+          <p className="mt-2 text-sm">RESPONSE{response}</p>
         </div>
       )}
     </div>
