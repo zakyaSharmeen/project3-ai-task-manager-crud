@@ -14,7 +14,7 @@ export default function AgentBox() {
   const [response, setResponse] = useState<string>("");
 
   const runAgent = async () => {
-    console.log("Button clicked"); // 👈 add this
+    console.log("Button clicked"); // add this
 
     const res = await axios.post<AgentResponse>(
       "http://localhost:5000/tasks/agent",
@@ -22,7 +22,7 @@ export default function AgentBox() {
         prompt: input,
       },
     );
-    console.log(res.data); // 👈 add this
+    console.log(res.data); //  add this
 
     setResponse(res.data.result);
 
